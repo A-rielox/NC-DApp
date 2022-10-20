@@ -10,9 +10,7 @@ using API.Entities;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UsersController : ControllerBase
+    public class UsersController : BaseController
     {
         private readonly DataContext _context;
 
@@ -81,18 +79,7 @@ namespace API.Controllers
             return NoContent();
         }
 
-        ////////////////////////////////////////////////
-        ///////////////////////////////////////////////////
-        // POST: api/Users
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<AppUser>> PostUser(AppUser appUser)
-        {
-            _context.AppUsers.Add(appUser);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetUser", new { id = appUser.Id }, appUser);
-        }
+        
 
         ////////////////////////////////////////////////
         ///////////////////////////////////////////////////
