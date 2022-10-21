@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
+using API.Interfaces;
+using API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -31,7 +33,8 @@ namespace API
         // PARA LA DEPENDENCY INJECTION
         public void ConfigureServices(IServiceCollection services)
         {
-            //var connectionString = builder.Configuration.GetConnectionString("DefaultSQLConnection");
+            services.AddScoped<ITokenService, TokenService>();
+
             services.AddDbContext<DataContext>(options =>
             {
                 options.UseSqlite(_config.GetConnectionString("DefaultConnection"));
