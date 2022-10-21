@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using API.Data;
 using API.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
@@ -23,6 +24,7 @@ namespace API.Controllers
         ///////////////////////////////////////////////////
         // GET: api/Users
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
         {
             var users = await _context.AppUsers.ToListAsync();
@@ -34,6 +36,7 @@ namespace API.Controllers
         ///////////////////////////////////////////////////
         // GET: api/Users/5
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<AppUser>> GetUser(int id)
         {
             var user = await _context.AppUsers.FindAsync(id);
@@ -49,61 +52,60 @@ namespace API.Controllers
         ////////////////////////////////////////////////
         ///////////////////////////////////////////////////
         // PUT: api/Users/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, AppUser appUser)
-        {
-            if (id != appUser.Id)
-            {
-                return BadRequest();
-            }
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> PutUser(int id, AppUser appUser)
+        //{
+        //    if (id != appUser.Id)
+        //    {
+        //        return BadRequest();
+        //    }
 
-            _context.Entry(appUser).State = EntityState.Modified;
+        //    _context.Entry(appUser).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!UserExists(id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
         
 
         ////////////////////////////////////////////////
         ///////////////////////////////////////////////////
         // DELETE: api/Users/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
-        {
-            var appUser = await _context.AppUsers.FindAsync(id);
-            if (appUser == null)
-            {
-                return NotFound();
-            }
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteUser(int id)
+        //{
+        //    var appUser = await _context.AppUsers.FindAsync(id);
+        //    if (appUser == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            _context.AppUsers.Remove(appUser);
-            await _context.SaveChangesAsync();
+        //    _context.AppUsers.Remove(appUser);
+        //    await _context.SaveChangesAsync();
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
         ////////////////////////////////////////////////
         ///////////////////////////////////////////////////
-        private bool UserExists(int id)
-        {
-            return _context.AppUsers.Any(e => e.Id == id);
-        }
+        //private bool UserExists(int id)
+        //{
+        //    return _context.AppUsers.Any(e => e.Id == id);
+        //}
     }
 }
