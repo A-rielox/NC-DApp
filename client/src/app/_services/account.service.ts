@@ -19,8 +19,6 @@ export class AccountService {
    login(model: any) {
       return this.http.post(this.baseUrl + 'account/login', model).pipe(
          map((res: User) => {
-            console.log('res del login', res);
-
             const user = res;
             if (user) {
                localStorage.setItem('user', JSON.stringify(user));
