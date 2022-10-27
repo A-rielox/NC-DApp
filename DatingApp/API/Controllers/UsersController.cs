@@ -8,104 +8,47 @@ using Microsoft.EntityFrameworkCore;
 using API.Data;
 using API.Entities;
 using Microsoft.AspNetCore.Authorization;
+using API.Interfaces;
+using API.DTOs;
 
 namespace API.Controllers
 {
+    [Authorize]
     public class UsersController : BaseController
     {
-        private readonly DataContext _context;
+        private readonly IUserRepository _userRepository;
 
-        public UsersController(DataContext context)
+        public UsersController(IUserRepository userRepository)
         {
-            _context = context;
+            _userRepository = userRepository;
         }
 
         ////////////////////////////////////////////////
         ///////////////////////////////////////////////////
         // GET: api/Users
         [HttpGet]
-        [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
+        //[AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers()
         {
-            var users = await _context.AppUsers.ToListAsync();
+            var users = await _userRepository.GetUsersAsync();
 
-            return users;
+            return Ok(users);
         }
 
         ////////////////////////////////////////////////
         ///////////////////////////////////////////////////
-        // GET: api/Users/5
-        [HttpGet("{id}")]
-        [Authorize]
-        public async Task<ActionResult<AppUser>> GetUser(int id)
+        // GET: api/Users/username
+        [HttpGet("{username}")]
+        public async Task<ActionResult<AppUser>> GetUser(string username)
         {
-            var user = await _context.AppUsers.FindAsync(id);
+            var user = await _userRepository.GetUserByUsernameAsync(username);
 
-            if (user == null)
-            {
-                return NotFound();
-            }
+            //if (user == null)
+            //{                     ------> SI OCUPARA FIRSTORDEFAULT EN EL USERREPOSITORY
+            //    return NotFound();
+            //}
 
             return user;
         }
-
-        ////////////////////////////////////////////////
-        ///////////////////////////////////////////////////
-        // PUT: api/Users/5
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutUser(int id, AppUser appUser)
-        //{
-        //    if (id != appUser.Id)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _context.Entry(appUser).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!UserExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
-
-        
-
-        ////////////////////////////////////////////////
-        ///////////////////////////////////////////////////
-        // DELETE: api/Users/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteUser(int id)
-        //{
-        //    var appUser = await _context.AppUsers.FindAsync(id);
-        //    if (appUser == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _context.AppUsers.Remove(appUser);
-        //    await _context.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
-
-        ////////////////////////////////////////////////
-        ///////////////////////////////////////////////////
-        //private bool UserExists(int id)
-        //{
-        //    return _context.AppUsers.Any(e => e.Id == id);
-        //}
     }
 }
