@@ -10,6 +10,7 @@ using API.Entities;
 using Microsoft.AspNetCore.Authorization;
 using API.Interfaces;
 using API.DTOs;
+using AutoMapper;
 
 namespace API.Controllers
 {
@@ -17,10 +18,12 @@ namespace API.Controllers
     public class UsersController : BaseController
     {
         private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
 
-        public UsersController(IUserRepository userRepository)
+        public UsersController(IUserRepository userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
+            _mapper = mapper;
         }
 
         ////////////////////////////////////////////////
@@ -30,7 +33,11 @@ namespace API.Controllers
         //[AllowAnonymous]
         public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers()
         {
-            var users = await _userRepository.GetUsersAsync();
+            //var users = await _userRepository.GetUsersAsync();
+            //var usersToReturn = _mapper.Map<IEnumerable<MemberDto>>(users);
+            //return Ok(usersToReturn);
+
+            var users = await _userRepository.GetMembersAsync();
 
             return Ok(users);
         }
@@ -39,16 +46,15 @@ namespace API.Controllers
         ///////////////////////////////////////////////////
         // GET: api/Users/username
         [HttpGet("{username}")]
-        public async Task<ActionResult<AppUser>> GetUser(string username)
+        public async Task<ActionResult<MemberDto>> GetUser(string username)
         {
-            var user = await _userRepository.GetUserByUsernameAsync(username);
+            //var user = await _userRepository.GetUserByUsernameAsync(username);
+            //var userToReturn = _mapper.Map<MemberDto>(user);
+            //return userToReturn;
 
-            //if (user == null)
-            //{                     ------> SI OCUPARA FIRSTORDEFAULT EN EL USERREPOSITORY
-            //    return NotFound();
-            //}
+            return await _userRepository.GetMemberAsync(username);
 
-            return user;
+
         }
     }
 }

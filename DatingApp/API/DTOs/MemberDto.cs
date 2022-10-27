@@ -4,7 +4,9 @@
     {
         public int Id { get; set; }
         public string Username { get; set; }
-        //public string PhotoUrl { get; set; }
+        public string PhotoUrl { get; set; }
+
+        // automapper va a agarrar la q dice "Get"Age para rellenar esta
         public int Age { get; set; }
         public string KnownAs { get; set; }
         public DateTime Created { get; set; }

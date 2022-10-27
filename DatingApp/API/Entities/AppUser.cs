@@ -29,10 +29,6 @@ namespace API.Entities
         // el cascade delete
 
 
-
-
-
-
         //public ICollection<UserLike> LikedByUsers { get; set; }
         //public ICollection<UserLike> LikedUsers { get; set; }
 
@@ -40,9 +36,9 @@ namespace API.Entities
         //public ICollection<Message> MessagesReceived { get; set; }
         //public ICollection<AppUserRole> UserRoles { get; set; }
 
-        public int GetAge()
-        {
-            return DateOfBirth.CalculateAge();
-        }
+        //public int GetAge()
+        //{
+        //    return DateOfBirth.CalculateAge();
+        //}
     }
 }
