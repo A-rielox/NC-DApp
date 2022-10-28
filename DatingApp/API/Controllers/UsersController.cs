@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using API.Interfaces;
 using API.DTOs;
 using AutoMapper;
+using System.Security.Claims;
 
 namespace API.Controllers
 {
@@ -60,6 +61,28 @@ namespace API.Controllers
             return user;
 
 
+        }
+
+        ////////////////////////////////////////////////
+        ///////////////////////////////////////////////////
+        // PUT: api/Users
+        [HttpPut]
+        public async Task<ActionResult> UpdateUser(MemberUpdateDto memberUpdateDto)
+        {
+            // busco en el claim del token donde puse su username ( el token lo creo en el _tokenService)
+            // me va a devolver el username que aparece en el token
+            var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _userRepository.GetUserByUsernameAsync(username);
+
+            // p' pasar el memberUpdateDto a un user ( me hace el update del user con lo q viene en 
+            // el memberUpdateDto )
+            _mapper.Map(memberUpdateDto, user);
+
+            _userRepository.Update(user);
+
+            if(await _userRepository.SaveAllAsync()) return NoContent();
+
+            return BadRequest("Fail to update user.");
         }
     }
 }
