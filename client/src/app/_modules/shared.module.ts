@@ -7,16 +7,20 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 //toastr
 import { ToastrModule } from 'ngx-toastr';
 
+// galleria
+import { NgxGalleryModule } from '@kolkov/ngx-gallery';
+
 @NgModule({
    declarations: [],
    imports: [
       CommonModule,
+      NgxGalleryModule,
       // ngx-bootstrap
       BsDropdownModule.forRoot(),
       TabsModule.forRoot(),
       //toastr
       ToastrModule.forRoot({ positionClass: 'toast-bottom-right' }),
    ],
-   exports: [BsDropdownModule, ToastrModule, TabsModule],
+   exports: [BsDropdownModule, ToastrModule, TabsModule, NgxGalleryModule],
 })
 export class SharedModule {}
