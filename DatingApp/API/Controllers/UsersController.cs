@@ -12,6 +12,7 @@ using API.Interfaces;
 using API.DTOs;
 using AutoMapper;
 using System.Security.Claims;
+using API.Extensions;
 
 namespace API.Controllers
 {
@@ -20,11 +21,15 @@ namespace API.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
+        private readonly IPhotoService _photoService;
 
-        public UsersController(IUserRepository userRepository, IMapper mapper)
+        public UsersController(IUserRepository userRepository, IMapper mapper,
+            IPhotoService photoService
+            )
         {
             _userRepository = userRepository;
             _mapper = mapper;
+            _photoService = photoService;
         }
 
         ////////////////////////////////////////////////
@@ -71,7 +76,10 @@ namespace API.Controllers
         {
             // busco en el claim del token donde puse su username ( el token lo creo en el _tokenService)
             // me va a devolver el username que aparece en el token
-            var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            //var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            // le cree el extension method
+
+            var username = User.GetUsername();
             var user = await _userRepository.GetUserByUsernameAsync(username);
 
             // p' pasar el memberUpdateDto a un user ( me hace el update del user con lo q viene en 
@@ -84,5 +92,38 @@ namespace API.Controllers
 
             return BadRequest("Fail to update user.");
         }
+        
+        ////////////////////////////////////////////////
+        ///////////////////////////////////////////////////
+        // POST: api/Users/add-photo
+        [HttpPost("add-photo")]
+        public async Task<ActionResult<PhotoDto>> AddPhoto(IFormFile file)
+        {
+            // GetUsername() es el extension method que me devuelve el username q esta en el token
+            // recordar q necesito q en GetUserByUsernameAsync se haga el eagerLoading de las fotos
+            var user = await _userRepository.GetUserByUsernameAsync(User.GetUsername());
+            var result = await _photoService.AddPhotoAsync(file);
+
+            if (result.Error != null) return BadRequest(result.Error.Message);
+
+            var photo = new Photo
+            {
+                Url = result.SecureUrl.AbsoluteUri,
+                PublicId = result.PublicId
+            };
+
+            if(user.Photos.Count == 0)
+            {
+                photo.IsMain = true;
+            }
+
+            user.Photos.Add(photo);
+
+            if(await _userRepository.SaveAllAsync())
+                return _mapper.Map<PhotoDto>(photo);
+
+            return BadRequest("Problem adding photo.");
+        }
+
     }
 }
