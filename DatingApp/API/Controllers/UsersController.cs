@@ -42,6 +42,9 @@ namespace API.Controllers
             return Ok(users);
         }
 
+        // ActionResult
+        // Representa el resultado de un método de acción.
+
         ////////////////////////////////////////////////
         ///////////////////////////////////////////////////
         // GET: api/Users/username
@@ -52,7 +55,9 @@ namespace API.Controllers
             //var userToReturn = _mapper.Map<MemberDto>(user);
             //return userToReturn;
 
-            return await _userRepository.GetMemberAsync(username);
+            var user = await _userRepository.GetMemberAsync(username);
+
+            return user;
 
 
         }

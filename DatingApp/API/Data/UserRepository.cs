@@ -28,8 +28,10 @@ namespace API.Data
                 .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
 
-            // con projectto me hace mas eficiente la busqueda en la db, ya q solo extrae las
-            // props q necesito
+            // con projectto me hace mas eficiente la busqueda en la db, ya q solo me trae las
+            // props q necesito ( las del dto )
+
+            // con ProjectTo  No necesito el .include() ( lo hace solito )
         }
 
         ////////////////////////////////////////////////
@@ -40,6 +42,8 @@ namespace API.Data
             return await _context.AppUsers
                 .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
+
+            // con ProjectTo  No necesito el .include() ( lo hace solito )
         }
 
         ////////////////////////////////////////////////
@@ -66,7 +70,7 @@ namespace API.Data
         //
         public async Task<IEnumerable<AppUser>> GetUsersAsync()
         {
-            // asi da circular reference exception xq un user tiene photos y photos tiene user y ...
+            // sin dtos da circular reference exception xq un user tiene photos y photos tiene user y ...
             // para evitarlo uso el DTO de member q ocupa photodto q no tiene appuser ( EN LO Q DEVUELVO EN 
             // EL USERCONTROLLER )
             return await _context.AppUsers.Include(u => u.Photos).ToListAsync();

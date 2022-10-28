@@ -36,6 +36,10 @@ namespace API.Entities
         //public ICollection<Message> MessagesReceived { get; set; }
         //public ICollection<AppUserRole> UserRoles { get; set; }
 
+        // NO lo puedo incluir para q funcione el :
+        // .ProjectTo<MemberDto>(_mapper.ConfigurationProvider) en UserRepository
+        // q es p' hacer + eficiente la busqueda en la db
+        //
         //public int GetAge()
         //{
         //    return DateOfBirth.CalculateAge();

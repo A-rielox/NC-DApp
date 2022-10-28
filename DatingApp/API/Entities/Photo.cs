@@ -12,7 +12,7 @@ namespace API.Entities
         public bool IsMain { get; set; }
         public string PublicId { get; set; }
 
-        // p'q ocupe la id del AppUser como foreign-key, y pa prop AppUserId NO es nullable ( NO puede
+        // p'q ocupe la id del AppUser como foreign-key, y paq la prop AppUserId NO sea nullable ( NO puede
         // haber fotos q no esten relacionadas a un AppUser )
         public AppUser AppUser { get; set; }
         public int AppUserId { get; set; }
