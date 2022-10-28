@@ -54,7 +54,7 @@ namespace API.Controllers
         ////////////////////////////////////////////////
         ///////////////////////////////////////////////////
         // GET: api/Users/username
-        [HttpGet("{username}")]
+        [HttpGet("{username}",Name = "GetUser")]
         public async Task<ActionResult<MemberDto>> GetUser(string username)
         {
             //var user = await _userRepository.GetUserByUsernameAsync(username);
@@ -120,7 +120,12 @@ namespace API.Controllers
             user.Photos.Add(photo);
 
             if(await _userRepository.SaveAllAsync())
-                return _mapper.Map<PhotoDto>(photo);
+            {
+                // return _mapper.Map<PhotoDto>(photo);
+                // el " new {} " es xq la ruta GetUser ocupa ese parametro para ir al user
+                return CreatedAtRoute("GetUser", new { username = user.UserName } , _mapper.Map<PhotoDto>(photo));
+
+            }
 
             return BadRequest("Problem adding photo.");
         }
