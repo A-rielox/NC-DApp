@@ -28,15 +28,21 @@ namespace API.Entities
         // asi las fotos quedan ligadas a un AppUser, y cuando se borre un user se van a borrar las fotos
         // el cascade delete
 
-
+        ////////////////////////////
         public ICollection<UserLike> LikedByUsers { get; set; } // los q te dan like
         public ICollection<UserLike> LikedUsers { get; set; } // a quienes les doy like
+
         // un SourceUser puede tener varios LikedUsers
         // un LikedUser puede tener varios LikedByUsers
         // la configuracion p' 2waybinding se hace en LA TABLA EN DataContext.cs
 
-        //public ICollection<Message> MessagesSent { get; set; }
-        //public ICollection<Message> MessagesReceived { get; set; }
+        ////////////////////////////
+
+        public ICollection<Message> MessagesSent { get; set; }
+        public ICollection<Message> MessagesReceived { get; set; }
+
+        ////////////////////////////
+        
         //public ICollection<AppUserRole> UserRoles { get; set; }
 
         // NO lo puedo incluir para q funcione el :
