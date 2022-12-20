@@ -19,7 +19,8 @@ public class Startup
     // PARA LA DEPENDENCY INJECTION
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddAplicationServices(_config); // p' mi metodo de extension ApplicationServiceExtensions
+        // p' mi metodo de extension ApplicationServiceExtensions
+        services.AddAplicationServices(_config); 
 
         services.AddControllers();
         services.AddCors();
@@ -28,6 +29,7 @@ public class Startup
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
         });
 
+        // p' mi metodo de extension AddIdentityServices
         services.AddIdentityServices(_config);
     }
 
@@ -35,6 +37,7 @@ public class Startup
     // PARA LA PIPELINE
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
+        // este es para ocupar mi middleware de excepciones y no tener que poner try-catch por todos lados
         app.UseMiddleware<ExceptionMiddleware>();
 
         if (env.IsDevelopment())
